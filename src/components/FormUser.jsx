@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { getFormConfig } from '../utils/config';
+import { getFormConfig, getRemoteConfig } from '../utils/config';
 import { Send, CheckCircle, HelpCircle, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -12,12 +11,23 @@ const FormUser = () => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        const currentConfig = getFormConfig();
-        setConfig(currentConfig);
+        const loadConfig = async () => {
+            // 1. Load local version first for instant feedback (SSR/Hydration feel)
+            const currentConfig = getFormConfig();
+            setConfig(currentConfig);
+            if (currentConfig.design) applyDesign(currentConfig.design);
 
-        // Update CSS variables based on config
-        if (currentConfig.design) {
-            const d = currentConfig.design;
+            // 2. Fetch remote version for ground truth
+            if (currentConfig.settings?.webhookUrl) {
+                const remoteConfig = await getRemoteConfig(currentConfig.settings.webhookUrl);
+                if (remoteConfig) {
+                    setConfig(remoteConfig);
+                    if (remoteConfig.design) applyDesign(remoteConfig.design);
+                }
+            }
+        };
+
+        const applyDesign = (d) => {
             document.documentElement.style.setProperty('--primary', d.primaryColor);
             document.documentElement.style.setProperty('--primary-2', d.primaryColor2 || d.primaryColor);
             document.documentElement.style.setProperty('--secondary', d.secondaryColor);
@@ -26,7 +36,9 @@ const FormUser = () => {
             document.documentElement.style.setProperty('--accent-2', d.accentColor2 || d.accentColor || '#fbbf24');
             document.documentElement.style.setProperty('--surface', d.surfaceColor || '#f8fbff');
             document.documentElement.style.setProperty('--surface-2', d.surfaceColor2 || d.surfaceColor || '#ffffff');
-        }
+        };
+
+        loadConfig();
     }, []);
 
     if (!config) return <div className="min-h-screen flex items-center justify-center bg-[#f3f6fc]">

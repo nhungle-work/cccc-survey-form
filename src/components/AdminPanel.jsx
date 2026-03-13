@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { getFormConfig, saveFormConfig } from '../utils/config';
+import { getFormConfig, saveFormConfig, saveRemoteConfig } from '../utils/config';
 import {
     Save, Link as LinkIcon, Settings, Layout, ExternalLink,
     Plus, Trash2, GripVertical, ChevronDown, ChevronUp, Edit3,
@@ -15,6 +14,7 @@ const AdminPanel = () => {
     const [editingQuestion, setEditingQuestion] = useState(null);
     const [responses, setResponses] = useState([]);
     const [isLoadingData, setIsLoadingData] = useState(false);
+    const [isPublishing, setIsPublishing] = useState(false);
 
     useEffect(() => {
         const currentConfig = getFormConfig();
@@ -85,8 +85,33 @@ const AdminPanel = () => {
     const handleSave = () => {
         saveFormConfig(config);
         syncDesign(config.design); // Sync live
-        setSaveStatus('Lưu thành công!');
+        setSaveStatus('Đã lưu bản nháp!');
         setTimeout(() => setSaveStatus(''), 3000);
+    };
+
+    const handlePublish = async () => {
+        if (!config.settings?.webhookUrl) {
+            alert("Bạn cần dán Link Webhook vào tab 'Tích hợp' trước khi Xuất bản!");
+            setActiveTab('integration');
+            return;
+        }
+
+        try {
+            setIsPublishing(true);
+            setSaveStatus('Đang xuất bản...');
+            const result = await saveRemoteConfig(config);
+            if (result.success) {
+                setSaveStatus('Đã xuất bản lên Trang chủ! ✨');
+                setTimeout(() => setSaveStatus(''), 5000);
+            } else {
+                alert("Lỗi khi xuất bản: " + result.message);
+                setSaveStatus('Lỗi xuất bản');
+            }
+        } catch (err) {
+            alert("Đã xảy ra lỗi hệ thống.");
+        } finally {
+            setIsPublishing(false);
+        }
     };
 
     const handleUpdateQuestions = (newQuestions) => {
@@ -212,8 +237,23 @@ const AdminPanel = () => {
                                     </motion.span>
                                 )}
                             </AnimatePresence>
-                            <button onClick={handleSave} className="btn-primary shadow-xl">
-                                <Save size={18} /> Lưu Thay Đổi
+                            <button
+                                onClick={handleSave}
+                                className="px-6 py-3 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-all flex items-center gap-2"
+                            >
+                                <Edit3 size={18} /> Lưu Bản Nháp
+                            </button>
+                            <button
+                                onClick={handlePublish}
+                                disabled={isPublishing}
+                                className="btn-primary shadow-xl shadow-blue-200 flex items-center gap-2"
+                            >
+                                {isPublishing ? (
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    <ArrowUpRight size={18} />
+                                )}
+                                {isPublishing ? 'Đang gửi...' : 'Xuất bản Trang chủ'}
                             </button>
                         </div>
                     </motion.div>

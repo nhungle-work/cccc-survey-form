@@ -8,7 +8,7 @@ export const defaultFormConfig = {
     {
       id: "q1",
       type: "checkbox_with_other",
-      title: "1. Anh/Chị quan tâm nhất đến chủ đề nào cho phiên Hỏi đáp cùng chuyên gia?",
+      title: "Anh/Chị quan tâm nhất đến chủ đề nào cho phiên Hỏi đáp cùng chuyên gia?",
       required: true,
       options: [
         "Bảo hiểm xã hội (BHXH) & Thuế liên quan đến người lao động",
@@ -20,14 +20,14 @@ export const defaultFormConfig = {
     {
       id: "q2",
       type: "textarea",
-      title: "2. Nếu được tham dự chương trình, Anh/Chị muốn gửi câu hỏi nào để chuyên gia trực tiếp tư vấn?",
+      title: "Nếu được tham dự chương trình, Anh/Chị muốn gửi câu hỏi nào để chuyên gia trực tiếp tư vấn?",
       placeholder: "Câu hỏi của Anh/Chị...",
       required: true,
     },
     {
       id: "q3",
       type: "radio",
-      title: "3. Vị trí công việc của Anh/Chị",
+      title: "Vị trí công việc của Anh/Chị",
       required: true,
       options: [
         "Tổng Giám đốc / Chủ doanh nghiệp",
@@ -40,7 +40,7 @@ export const defaultFormConfig = {
     {
       id: "q4",
       type: "radio_with_other",
-      title: "4. Lĩnh vực hoạt động của doanh nghiệp Anh/Chị là gì?",
+      title: "Lĩnh vực hoạt động của doanh nghiệp Anh/Chị là gì?",
       required: true,
       options: [
         "Sản xuất",
@@ -56,7 +56,7 @@ export const defaultFormConfig = {
     {
       id: "q5",
       type: "radio_with_link",
-      title: "5. Anh/Chị cho phép CCCC gửi thông tin chương trình qua bản tin pháp luật chứ? (Theo dõi CCCC tại [Facebook](https://www.facebook.com/profile.php?id=61559581396959) hoặc [LinkedIn](https://www.linkedin.com/company/chief-corporate-counsel-club/))",
+      title: "Anh/Chị cho phép CCCC gửi thông tin chương trình qua bản tin pháp luật chứ? (Theo dõi CCCC tại [Facebook](https://www.facebook.com/profile.php?id=61559581396959) hoặc [LinkedIn](https://www.linkedin.com/company/chief-corporate-counsel-club/))",
       required: true,
       options: [
         "Tôi đồng ý",
@@ -70,7 +70,7 @@ export const defaultFormConfig = {
     {
       id: "q6",
       type: "email",
-      title: "6. Email nhận thông tin chương trình",
+      title: "Email nhận thông tin chương trình",
       placeholder: "Email: _______",
       required: true
     }
@@ -102,6 +102,50 @@ export const getFormConfig = () => {
     }
   }
   return defaultFormConfig;
+};
+
+// NEW: Save to Google Sheets
+export const saveRemoteConfig = async (config) => {
+  if (!config.settings?.webhookUrl) return { success: false, message: "No Webhook URL" };
+
+  try {
+    const formData = new URLSearchParams();
+    formData.append("payload", JSON.stringify({
+      type: 'save_config',
+      config: config
+    }));
+
+    await fetch(config.settings.webhookUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData.toString()
+    });
+
+    // Also save locally as a cached version
+    localStorage.setItem('cccc_form_config', JSON.stringify(config));
+    return { success: true };
+  } catch (err) {
+    console.error("Error saving remote config", err);
+    return { success: false, message: err.message };
+  }
+};
+
+// NEW: Get from Google Sheets
+export const getRemoteConfig = async (webhookUrl) => {
+  if (!webhookUrl) return null;
+
+  try {
+    const response = await fetch(`${webhookUrl}?type=get_config`);
+    const data = await response.json();
+    if (data && data.header) {
+      localStorage.setItem('cccc_form_config', JSON.stringify(data));
+      return data;
+    }
+  } catch (err) {
+    console.error("Error fetching remote config", err);
+  }
+  return null;
 };
 
 export const saveFormConfig = (config) => {
