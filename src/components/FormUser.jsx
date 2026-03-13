@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { getFormConfig, getRemoteConfig } from '../utils/config';
 import { Send, CheckCircle, HelpCircle, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
