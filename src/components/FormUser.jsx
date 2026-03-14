@@ -259,12 +259,12 @@ const FormUser = () => {
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="flex justify-center mb-6 w-full"
+                                    style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', width: '100%' }}
                                 >
                                     <img
                                         src={config.design.logoUrl}
                                         alt="Logo"
-                                        className="max-w-[180px] max-h-[80px] object-contain"
+                                        style={{ maxWidth: '180px', maxHeight: '80px', objectFit: 'contain' }}
                                     />
                                 </motion.div>
                             )}
