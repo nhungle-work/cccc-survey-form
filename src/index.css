@@ -111,6 +111,7 @@ body {
 .btn-primary {
   background: var(--primary-gradient);
   color: white;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 800;
   padding: 0.75rem 1.5rem;
   border-radius: 1rem;
@@ -140,6 +141,7 @@ body {
 .btn-secondary {
   background: #f3f4f6;
   color: var(--text-dark);
+  font-family: 'Montserrat', sans-serif;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 10px 20px;

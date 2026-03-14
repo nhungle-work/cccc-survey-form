@@ -256,13 +256,17 @@ const FormUser = () => {
                     >
                         <AnimatePresence>
                             {config.design.logoUrl && (
-                                <motion.img
+                                <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    src={config.design.logoUrl}
-                                    alt="Logo"
-                                    className="logo-container mx-auto block"
-                                />
+                                    className="flex justify-center mb-6 w-full"
+                                >
+                                    <img
+                                        src={config.design.logoUrl}
+                                        alt="Logo"
+                                        className="max-w-[180px] max-h-[80px] object-contain"
+                                    />
+                                </motion.div>
                             )}
                         </AnimatePresence>
                         <h1 className="text-3xl md:text-4xl font-black mb-6 text-gray-800 leading-tight">
