@@ -245,7 +245,7 @@ const FormUser = () => {
                 </motion.div>
             )}
 
-            <div className="max-w-3xl mx-auto px-4 -mt-32 md:-mt-48 relative z-10">
+            <div className={`max-w-3xl mx-auto px-4 relative z-10 ${config.header.backgroundImage ? '-mt-32 md:-mt-48' : 'pt-8 md:pt-12'}`}>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-8">
 
                     {/* Header Panel */}
