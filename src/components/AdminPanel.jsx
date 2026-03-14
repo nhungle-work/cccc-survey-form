@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, Reorder, AnimatePresence } from 'framer-motion';
 import * as XLSX from 'xlsx';
+import localLogo from '../assets/cccc-logo.png';
 
 const AdminPanel = () => {
     const [config, setConfig] = useState(null);
@@ -441,11 +442,9 @@ const AdminPanel = () => {
                                             />
                                         </div>
                                     )}
-                                    {config.design.logoUrl && (
                                         <div className="p-6 bg-white rounded-3xl border border-gray-100 flex items-center justify-center">
-                                            <img src={config.design.logoUrl} alt="Logo Preview" className="max-h-12 object-contain" />
+                                            <img src={config.design.logoUrl || localLogo} alt="Logo Preview" className="max-h-24 object-contain" />
                                         </div>
-                                    )}
                                 </div>
                             </div>
                         )}

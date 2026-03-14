@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getFormConfig, getRemoteConfig } from '../utils/config';
 import { Send, CheckCircle, HelpCircle, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import localLogo from '../assets/cccc-logo.png';
 
 const FormUser = () => {
     const [config, setConfig] = useState(null);
@@ -262,9 +263,9 @@ const FormUser = () => {
                                     style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', width: '100%' }}
                                 >
                                     <img
-                                        src={config.design.logoUrl}
+                                        src={config.design.logoUrl || localLogo}
                                         alt="Logo"
-                                        style={{ maxWidth: '180px', maxHeight: '80px', objectFit: 'contain' }}
+                                        style={{ maxWidth: '180px', maxHeight: '180px', objectFit: 'contain' }}
                                     />
                                 </motion.div>
                             )}
