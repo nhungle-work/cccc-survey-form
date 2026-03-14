@@ -214,7 +214,7 @@ const FormUser = () => {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="btn-primary mt-10"
+                        className="btn-primary mx-auto mt-12"
                         onClick={() => {
                             setIsSubmitted(false);
                             setFormData({});
@@ -229,7 +229,7 @@ const FormUser = () => {
     }
 
     return (
-        <div className="min-h-screen relative pb-20 font-inter">
+        <div className="min-h-screen relative pb-20 font-montserrat">
             {/* Dynamic Mesh Background */}
             <div className="brand-bg"></div>
 
@@ -261,15 +261,23 @@ const FormUser = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     src={config.design.logoUrl}
                                     alt="Logo"
-                                    className="logo-container"
+                                    className="logo-container mx-auto block"
                                 />
                             )}
                         </AnimatePresence>
                         <h1 className="text-3xl md:text-4xl font-black mb-6 text-gray-800 leading-tight">
                             {config.header.title}
                         </h1>
-                        <div className="text-gray-600 text-lg whitespace-pre-wrap leading-relaxed">
-                            {config.header.description}
+                        <div className="text-gray-600 text-lg leading-relaxed mt-5">
+                            {config.header.description?.split(/\\n|\n/).map((item, key) => {
+                                // Nếu là dòng trống (user cố tình enter 2 lần để cách dòng), giữ chiều cao để tạo blank line
+                                if (item.trim() === '') return <div key={key} className="h-4"></div>;
+                                return (
+                                    <p key={key} className="mb-2">
+                                        {item}
+                                    </p>
+                                );
+                            })}
                         </div>
                     </motion.div>
 
@@ -288,7 +296,7 @@ const FormUser = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className={`glass-panel p-8 md:p-10 transition-all duration-300 ${isError ? 'ring-2 ring-[var(--error)] bg-red-50/10' : 'hover:shadow-xl'}`}
                                 >
-                                    <h3 className="text-xl font-bold mb-6 text-gray-800 flex flex-wrap gap-2">
+                                    <h3 className="text-xl font-bold mb-10 pb-2 text-gray-800 flex flex-wrap gap-2">
                                         <span className="text-[var(--primary)] opacity-50">{index + 1}.</span>
                                         <span dangerouslySetInnerHTML={{
                                             __html: q.title.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800">$1</a>')
@@ -296,7 +304,7 @@ const FormUser = () => {
                                     </h3>
 
                                     {q.description && q.id !== 'q6' && (
-                                        <p className="text-base text-light mb-6 -mt-4 bg-gray-50 p-3 rounded-lg border-l-4 border-gray-200">{q.description}</p>
+                                        <p className="text-base text-light mb-8 -mt-4 bg-gray-50 p-3 rounded-lg border-l-4 border-gray-200">{q.description}</p>
                                     )}
 
                                     {/* Question Rendering */}
@@ -480,11 +488,7 @@ const FormUser = () => {
                         })}
                     </AnimatePresence>
 
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-6 mt-6 pb-10">
-                        <div className="flex flex-col gap-1">
-                            <p className="text-xs text-light font-medium uppercase tracking-widest">Bảo mật & Quyền riêng tư</p>
-                            <p className="text-xs text-light">Mọi thông tin bạn cung cấp đều được CCCC bảo mật tuyệt đối.</p>
-                        </div>
+                    <div className="flex flex-col items-center gap-6 mt-10 pb-10">
                         <motion.button
                             type="submit"
                             disabled={isSubmitting}
@@ -502,6 +506,10 @@ const FormUser = () => {
                                 <>Gửi Khảo Sát <Send size={20} /></>
                             )}
                         </motion.button>
+                        <div className="flex flex-col gap-1 text-center">
+                            <p className="text-xs text-light font-medium uppercase tracking-widest">Bảo mật & Quyền riêng tư</p>
+                            <p className="text-xs text-light">Mọi thông tin bạn cung cấp đều được CCCC bảo mật tuyệt đối.</p>
+                        </div>
                     </div>
 
                 </form>

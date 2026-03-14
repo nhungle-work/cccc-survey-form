@@ -185,7 +185,7 @@ const AdminPanel = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#f8fbff] flex flex-col md:flex-row font-inter">
+        <div className="min-h-screen bg-[#f8fbff] flex flex-col md:flex-row font-montserrat">
             {/* Sidebar Navigation */}
             <div className="w-full md:w-64 bg-white shadow-2xl flex flex-col z-20">
                 <div className="p-8 border-b border-gray-100">
