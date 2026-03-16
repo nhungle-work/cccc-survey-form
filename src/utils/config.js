@@ -88,7 +88,9 @@ export const defaultFormConfig = {
   },
 
   settings: {
-    webhookUrl: ""
+    // DÁN LINK WEBHOOK CỦA BẠN VÀO ĐÂY ĐỂ ĐỒNG BỘ TRÊN ĐIỆN THOẠI
+    webhookUrl: "https://script.google.com/macros/s/AKfycbwyV_oKz_8wkxysL8aMyQ7kBDqVC5_Eo4OBhAo7hIYuNWX7kSrUczb9IS2C_6g1mMw-/exec"
+
   }
 };
 

@@ -410,3 +410,29 @@ body {
   background: rgba(0, 176, 240, 0.1);
   color: var(--primary);
 }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .glass-panel {
+    border-radius: 20px;
+    padding: 1.5rem !important;
+  }
+  
+  .custom-control {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .custom-control input {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .custom-control span {
+    font-size: 0.95rem;
+  }
+
+  h3 span.text-blue-600 {
+    word-break: break-word;
+  }
+}

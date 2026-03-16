@@ -246,14 +246,14 @@ const FormUser = () => {
                 </motion.div>
             )}
 
-            <div className={`max-w-3xl mx-auto px-4 relative z-10 ${config.header.backgroundImage ? '-mt-32 md:-mt-48' : 'pt-8 md:pt-12'}`}>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            <div className={`max-w-3xl mx-auto px-4 relative z-10 ${config.header.backgroundImage ? '-mt-24 md:-mt-48' : 'pt-6 md:pt-12'}`}>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6 md:gap-8">
 
                     {/* Header Panel */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="glass-panel p-8 md:p-12 border-t-[10px] border-t-[var(--primary)] shadow-2xl"
+                        className="glass-panel p-6 md:p-12 border-t-[8px] md:border-t-[10px] border-t-[var(--primary)] shadow-2xl"
                     >
                         <AnimatePresence>
                             {config.design.logoUrl && (
@@ -270,10 +270,10 @@ const FormUser = () => {
                                 </motion.div>
                             )}
                         </AnimatePresence>
-                        <h1 className="text-3xl md:text-4xl font-black mb-6 text-gray-800 leading-tight">
+                        <h1 className="text-2xl md:text-4xl font-black mb-4 md:mb-6 text-gray-800 leading-tight">
                             {config.header.title}
                         </h1>
-                        <div className="text-gray-600 text-lg leading-relaxed mt-5">
+                        <div className="text-gray-600 text-base md:text-lg leading-relaxed mt-4 md:mt-5">
                             {config.header.description?.split(/\\n|\n/).map((item, key) => {
                                 // Nếu là dòng trống (user cố tình enter 2 lần để cách dòng), giữ chiều cao để tạo blank line
                                 if (item.trim() === '') return <div key={key} className="h-4"></div>;
@@ -299,13 +299,13 @@ const FormUser = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, margin: "-100px" }}
                                     transition={{ delay: index * 0.1 }}
-                                    className={`glass-panel p-8 md:p-10 transition-all duration-300 ${isError ? 'ring-2 ring-[var(--error)] bg-red-50/10' : 'hover:shadow-xl'}`}
+                                    className={`glass-panel p-6 md:p-10 transition-all duration-300 ${isError ? 'ring-2 ring-[var(--error)] bg-red-50/10' : 'hover:shadow-xl'}`}
                                 >
-                                    <h3 className="text-xl font-bold mb-10 pb-2 text-gray-800 flex flex-wrap gap-2">
+                                    <h3 className="text-lg md:text-xl font-bold mb-6 md:mb-10 pb-2 text-gray-800 flex flex-wrap gap-2">
                                         <span className="text-[var(--primary)] opacity-50">{index + 1}.</span>
                                         <span dangerouslySetInnerHTML={{
                                             __html: q.title.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800">$1</a>')
-                                        }} /> {q.required && <span className="text-error">*</span>}
+                                        }} /> {q.required && <span className="text-error font-black">*</span>}
                                     </h3>
 
                                     {q.description && q.id !== 'q6' && (

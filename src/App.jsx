@@ -7,7 +7,10 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<FormUser />} />
-      <Route path="/admin" element={<AdminPanel />} />
+      <Route path="/admincccc0316" element={<AdminPanel />} />
+      {/* Fallback route to prevent blank pages */}
+      <Route path="*" element={<FormUser />} />
+
     </Routes>
   );
 }
