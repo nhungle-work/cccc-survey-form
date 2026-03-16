@@ -60,7 +60,7 @@ export const defaultFormConfig = {
     {
       id: "q5",
       type: "radio_with_link",
-      title: "Anh/Chị cho phép CCCC gửi thông tin chương trình qua bản tin pháp luật chứ? (Theo dõi CCCC tại [Facebook](https://www.facebook.com/profile.php?id=61559581396959) hoặc [LinkedIn](https://www.linkedin.com/company/chief-corporate-counsel-club/))",
+      title: "Anh/Chị cho phép CCCC gửi thông tin chương trình qua bản tin pháp luật chứ?",
       required: true,
       options: [
         "Tôi đồng ý",
