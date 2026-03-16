@@ -247,9 +247,14 @@ const AdminPanel = () => {
                         <div>
                             <h2 className="text-3xl font-black text-gray-800 tracking-tight flex items-center gap-3">
                                 {tabs.find(t => t.id === activeTab)?.label}
-                                <span className="bg-blue-50 text-[10px] font-black text-[var(--primary)] px-3 py-1 rounded-full border border-blue-100 uppercase tracking-widest flex items-center gap-1">
-                                    <CloudSync size={12} /> Live Cloud
-                                </span>
+                                <div className="flex flex-col">
+                                    <span className="bg-blue-50 text-[10px] font-black text-[var(--primary)] px-3 py-1 rounded-full border border-blue-100 uppercase tracking-widest flex items-center gap-1 w-fit">
+                                        <CloudSync size={12} /> Cloud Connected
+                                    </span>
+                                    <span className="text-[10px] text-gray-400 font-mono mt-1 opacity-50 px-3 truncate max-w-[200px]">
+                                        {config?.settings?.webhookUrl}
+                                    </span>
+                                </div>
                             </h2>
                             <p className="text-gray-500 mt-1 font-medium italic">Quản lý và theo dõi hiệu quả khảo sát</p>
                         </div>

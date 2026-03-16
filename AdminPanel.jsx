@@ -3,7 +3,7 @@ import { getFormConfig, saveFormConfig, saveRemoteConfig } from '../utils/config
 import {
     Save, Link as LinkIcon, Settings, Layout, ExternalLink,
     Plus, Trash2, GripVertical, ChevronDown, ChevronUp, Edit3,
-    BarChart3, Users, MessageSquare, ArrowUpRight, CheckCircle, Upload
+    BarChart3, Users, MessageSquare, ArrowUpRight, CheckCircle, Upload, CloudSync
 } from 'lucide-react';
 import { motion, Reorder, AnimatePresence } from 'framer-motion';
 import * as XLSX from 'xlsx';
@@ -19,26 +19,35 @@ const AdminPanel = () => {
     const [isPublishing, setIsPublishing] = useState(false);
 
     useEffect(() => {
-        try {
-            const currentConfig = getFormConfig();
-            if (currentConfig) {
-                setConfig(currentConfig);
-                if (currentConfig.settings?.webhookUrl) {
-                    fetchData(currentConfig.settings.webhookUrl);
+        const initialize = async () => {
+            try {
+                // 1. Load local/default first
+                const currentConfig = getFormConfig();
+                if (currentConfig) {
+                    setConfig(currentConfig);
+                    if (currentConfig.design) syncDesign(currentConfig.design);
                 }
 
-                // Initial sync of CSS variables
-                if (currentConfig.design) {
-                    syncDesign(currentConfig.design);
+                // 2. FORCE SYNC FROM REMOTE (Cloud Truth)
+                const webhookUrl = currentConfig.settings?.webhookUrl;
+                if (webhookUrl) {
+                    console.log("Admin: Refreshing config from cloud...");
+                    const remoteConfig = await getRemoteConfig(webhookUrl);
+                    if (remoteConfig && remoteConfig.questions) {
+                        setConfig(remoteConfig);
+                        if (remoteConfig.design) syncDesign(remoteConfig.design);
+                        console.log("Admin: Cloud sync complete.");
+                    }
+                    
+                    // Fetch submissions
+                    fetchData(webhookUrl);
                 }
-            } else {
-                console.warn("No config found in local storage or default.");
-                setConfig(null);
+            } catch (error) {
+                console.error("Error initializing AdminPanel:", error);
             }
-        } catch (error) {
-            console.error("Error initializing AdminPanel:", error);
-            setConfig(null);
-        }
+        };
+
+        initialize();
     }, []);
 
     const syncDesign = (design) => {
@@ -236,8 +245,16 @@ const AdminPanel = () => {
                         className="flex justify-between items-center mb-12"
                     >
                         <div>
-                            <h2 className="text-3xl font-black text-gray-800 tracking-tight">
+                            <h2 className="text-3xl font-black text-gray-800 tracking-tight flex items-center gap-3">
                                 {tabs.find(t => t.id === activeTab)?.label}
+                                <div className="flex flex-col">
+                                    <span className="bg-blue-50 text-[10px] font-black text-[var(--primary)] px-3 py-1 rounded-full border border-blue-100 uppercase tracking-widest flex items-center gap-1 w-fit">
+                                        <CloudSync size={12} /> Cloud Connected
+                                    </span>
+                                    <span className="text-[10px] text-gray-400 font-mono mt-1 opacity-50 px-3 truncate max-w-[200px]">
+                                        {config?.settings?.webhookUrl}
+                                    </span>
+                                </div>
                             </h2>
                             <p className="text-gray-500 mt-1 font-medium italic">Quản lý và theo dõi hiệu quả khảo sát</p>
                         </div>

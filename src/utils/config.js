@@ -116,10 +116,10 @@ export const saveRemoteConfig = async (config) => {
       config: config
     }));
 
-    // Use a small timeout to ensure the fetch doesn't hang if no-cors is problematic
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
+    // 1. Send Save Request
     await fetch(config.settings.webhookUrl, {
       method: 'POST',
       mode: 'no-cors',
@@ -130,12 +130,25 @@ export const saveRemoteConfig = async (config) => {
     
     clearTimeout(timeoutId);
 
-    // Also save locally as a cached version
-    localStorage.setItem('cccc_form_config', JSON.stringify(config));
-    return { success: true };
+    // 2. VERIFICATION FETCH: Immediately try to read it back to confirm it reached the cloud
+    console.log("Verifying cloud save...");
+    await new Promise(r => setTimeout(r, 1500)); // Small delay for Google to settle
+    const verifyConfig = await getRemoteConfig(config.settings.webhookUrl);
+    
+    if (verifyConfig && verifyConfig.header && verifyConfig.header.title === config.header.title) {
+      console.log("Cloud verification SUCCESS");
+      localStorage.setItem('cccc_form_config', JSON.stringify(config));
+      return { success: true };
+    } else {
+      console.error("Cloud verification FAILED: Fetched data does not match saved data.");
+      return { 
+        success: false, 
+        message: "Dữ liệu chưa được lưu lên Cloud. Hãy kiểm tra lại phân quyền 'Anyone' của Apps Script." 
+      };
+    }
   } catch (err) {
     console.error("Error saving remote config", err);
-    return { success: false, message: err.message };
+    return { success: false, message: "Lỗi kết nối: " + err.message };
   }
 };
 
