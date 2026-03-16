@@ -19,15 +19,25 @@ const AdminPanel = () => {
     const [isPublishing, setIsPublishing] = useState(false);
 
     useEffect(() => {
-        const currentConfig = getFormConfig();
-        setConfig(currentConfig);
-        if (currentConfig.settings?.webhookUrl) {
-            fetchData(currentConfig.settings.webhookUrl);
-        }
+        try {
+            const currentConfig = getFormConfig();
+            if (currentConfig) {
+                setConfig(currentConfig);
+                if (currentConfig.settings?.webhookUrl) {
+                    fetchData(currentConfig.settings.webhookUrl);
+                }
 
-        // Initial sync of CSS variables
-        if (currentConfig.design) {
-            syncDesign(currentConfig.design);
+                // Initial sync of CSS variables
+                if (currentConfig.design) {
+                    syncDesign(currentConfig.design);
+                }
+            } else {
+                console.warn("No config found in local storage or default.");
+                setConfig(null);
+            }
+        } catch (error) {
+            console.error("Error initializing AdminPanel:", error);
+            setConfig(null);
         }
     }, []);
 
@@ -72,7 +82,12 @@ const AdminPanel = () => {
         XLSX.writeFile(wb, `Khao_sat_CCCC_${new Date().toLocaleDateString()}.xlsx`);
     };
 
-    if (!config) return <div className="p-8">Loading config...</div>;
+    if (!config) return (
+        <div className="min-h-screen flex items-center justify-center bg-[#f8fbff] flex-col gap-4">
+            <div className="w-12 h-12 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-gray-500 font-bold font-montserrat tracking-widest uppercase text-xs">Đang tải cấu hình Admin...</p>
+        </div>
+    );
 
     const handleChange = (section, field, value) => {
         setConfig(prev => ({
