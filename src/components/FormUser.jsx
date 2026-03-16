@@ -6,6 +6,7 @@ import localLogo from '../assets/cccc-logo.png';
 
 const FormUser = () => {
     const [config, setConfig] = useState(null);
+    const [isSyncing, setIsSyncing] = useState(false);
     const [formData, setFormData] = useState({});
     const [otherText, setOtherText] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,25 +15,26 @@ const FormUser = () => {
 
     useEffect(() => {
         const loadConfig = async () => {
-            // 1. Load local version first for instant feedback
+            // 1. Load local version first
             const currentConfig = getFormConfig();
             setConfig(currentConfig);
             if (currentConfig.design) applyDesign(currentConfig.design);
 
-            // 2. Fetch remote version for ground truth (Sync across devices)
+            // 2. Fetch remote version
             // Use the hardcoded webhookUrl from currentConfig (which we just updated)
             const webhookUrl = currentConfig.settings?.webhookUrl;
             if (webhookUrl) {
                 try {
-                    console.log("Fetching remote config from:", webhookUrl);
+                    setIsSyncing(true);
                     const remoteConfig = await getRemoteConfig(webhookUrl);
                     if (remoteConfig && remoteConfig.questions) {
-                        console.log("Remote config synced successfully:", remoteConfig);
                         setConfig(remoteConfig);
                         if (remoteConfig.design) applyDesign(remoteConfig.design);
                     }
                 } catch (error) {
-                    console.error("Failed to sync remote config:", error);
+                    console.error("Sync error:", error);
+                } finally {
+                    setIsSyncing(false);
                 }
             }
         };
@@ -239,6 +241,29 @@ const FormUser = () => {
 
     return (
         <div className="min-h-screen relative pb-20 font-montserrat">
+            {/* Syncing Indicator (Floating Badge) */}
+            <AnimatePresence>
+                {isSyncing && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, x: '-50%' }}
+                        animate={{ opacity: 1, y: 10, x: '-50%' }}
+                        exit={{ opacity: 0, y: -20, x: '-50%' }}
+                        className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] pointer-events-none"
+                    >
+                        <div className="bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-2xl border border-blue-100 flex items-center gap-3">
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                                className="text-[var(--primary)]"
+                            >
+                                <CloudSync size={20} />
+                            </motion.div>
+                            <span className="text-sm font-black text-gray-800 uppercase tracking-widest">Đang cập nhật câu hỏi...</span>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Dynamic Mesh Background */}
             <div className="brand-bg"></div>
 

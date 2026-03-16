@@ -124,17 +124,19 @@ const AdminPanel = () => {
 
         try {
             setIsPublishing(true);
-            setSaveStatus('Đang xuất bản...');
+            setSaveStatus('Đang xác thực Cloud...');
             const result = await saveRemoteConfig(config);
+            
             if (result.success) {
                 setSaveStatus('Đã xuất bản lên Trang chủ! ✨');
+                alert("✅ XUẤT BẢN THÀNH CÔNG!\n\n1. Google Sheets đã xác nhận nhận được dữ liệu.\n2. Các thiết bị khác (Điện thoại, Incognito) sẽ thấy bộ câu hỏi mới ngay lập tức.\n3. Nếu điện thoại chưa thấy, hãy nhấn refresh (F5).");
                 setTimeout(() => setSaveStatus(''), 5000);
             } else {
-                alert("Lỗi khi xuất bản: " + result.message);
-                setSaveStatus('Lỗi xuất bản');
+                alert("❌ LỖI ĐỒNG BỘ CLOUD:\n\n" + result.message + "\n\nGiải thích: Trình duyệt của bạn đã lưu bản nháp, nhưng lỗi xảy ra khi gửi lên Google Sheets. Các thiết bị khác sẽ KHÔNG thấy bản cập nhật này.");
+                setSaveStatus('Lỗi đồng bộ');
             }
         } catch (err) {
-            alert("Đã xảy ra lỗi hệ thống.");
+            alert("Đã xảy ra lỗi hệ thống: " + err.message);
         } finally {
             setIsPublishing(false);
         }
