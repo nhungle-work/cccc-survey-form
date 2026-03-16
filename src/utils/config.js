@@ -11,7 +11,8 @@ export const defaultFormConfig = {
       title: "Anh/Chị quan tâm nhất đến chủ đề nào cho phiên Hỏi đáp cùng chuyên gia?",
       required: true,
       options: [
-        "Bảo hiểm xã hội (BHXH) & Thuế liên quan đến người lao động",
+        "Thuế liên quan đến người lao động",
+        "Bảo hiểm xã hội (BHXH) và các phúc lợi của người lao động",
         "Bảo vệ dữ liệu cá nhân trong doanh nghiệp",
         "Các loại hợp đồng trong doanh nghiệp (soạn thảo, quản lý rủi ro, tranh chấp)"
       ],
@@ -20,22 +21,25 @@ export const defaultFormConfig = {
     {
       id: "q2",
       type: "textarea",
-      title: "Nếu được tham dự chương trình, Anh/Chị muốn gửi câu hỏi nào để chuyên gia trực tiếp tư vấn?",
+      title: "Nếu được tham dự chương trình, Anh/Chị muốn gửi câu hỏi nào để chuyên gia trực tiếp tư vấn? (Có thể gửi nhiều hơn một câu hỏi)",
       placeholder: "Câu hỏi của Anh/Chị...",
       required: true,
     },
     {
       id: "q3",
-      type: "radio",
-      title: "Vị trí công việc của Anh/Chị",
+      type: "radio_with_other",
+      title: "Phòng ban Anh/Chị đang công tác",
       required: true,
       options: [
-        "Tổng Giám đốc / Chủ doanh nghiệp",
-        "Trưởng phòng",
-        "Nhân viên cấp cao / Chuyên viên",
-        "Thực tập sinh",
-        "Người làm tự do"
-      ]
+        "Phòng Pháp chế",
+        "Phòng Nhân sự",
+        "Phòng Truyền thông",
+        "Phòng Kinh doanh",
+        "Phòng IT",
+        "Phòng Vận hành (Operations)",
+        "Phòng Sản xuất"
+      ],
+      allowOther: true
     },
     {
       id: "q4",
@@ -132,7 +136,7 @@ export const saveRemoteConfig = async (config) => {
 
     // 2. VERIFICATION FETCH: Immediately try to read it back to confirm it reached the cloud
     console.log("Verifying cloud save...");
-    await new Promise(r => setTimeout(r, 1500)); // Small delay for Google to settle
+    await new Promise(r => setTimeout(r, 3000)); // Increased delay for Google to settle
     const verifyConfig = await getRemoteConfig(config.settings.webhookUrl);
     
     if (verifyConfig && verifyConfig.header && verifyConfig.header.title === config.header.title) {
