@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getFormConfig, getRemoteConfig } from '../utils/config';
-import { Send, CheckCircle, HelpCircle, Mail } from 'lucide-react';
+import { Send, CheckCircle, HelpCircle, Mail, CloudSync } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import localLogo from '../assets/cccc-logo.png';
 
@@ -14,17 +14,25 @@ const FormUser = () => {
 
     useEffect(() => {
         const loadConfig = async () => {
-            // 1. Load local version first for instant feedback (SSR/Hydration feel)
+            // 1. Load local version first for instant feedback
             const currentConfig = getFormConfig();
             setConfig(currentConfig);
             if (currentConfig.design) applyDesign(currentConfig.design);
 
-            // 2. Fetch remote version for ground truth
-            if (currentConfig.settings?.webhookUrl) {
-                const remoteConfig = await getRemoteConfig(currentConfig.settings.webhookUrl);
-                if (remoteConfig) {
-                    setConfig(remoteConfig);
-                    if (remoteConfig.design) applyDesign(remoteConfig.design);
+            // 2. Fetch remote version for ground truth (Sync across devices)
+            // Use the hardcoded webhookUrl from currentConfig (which we just updated)
+            const webhookUrl = currentConfig.settings?.webhookUrl;
+            if (webhookUrl) {
+                try {
+                    console.log("Fetching remote config from:", webhookUrl);
+                    const remoteConfig = await getRemoteConfig(webhookUrl);
+                    if (remoteConfig && remoteConfig.questions) {
+                        console.log("Remote config synced successfully:", remoteConfig);
+                        setConfig(remoteConfig);
+                        if (remoteConfig.design) applyDesign(remoteConfig.design);
+                    }
+                } catch (error) {
+                    console.error("Failed to sync remote config:", error);
                 }
             }
         };

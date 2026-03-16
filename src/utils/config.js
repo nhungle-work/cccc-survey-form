@@ -90,7 +90,6 @@ export const defaultFormConfig = {
   settings: {
     // DÁN LINK WEBHOOK CỦA BẠN VÀO ĐÂY ĐỂ ĐỒNG BỘ TRÊN ĐIỆN THOẠI
     webhookUrl: "https://script.google.com/macros/s/AKfycbwyV_oKz_8wkxysL8aMyQ7kBDqVC5_Eo4OBhAo7hIYuNWX7kSrUczb9IS2C_6g1mMw-/exec"
-
   }
 };
 
@@ -117,12 +116,19 @@ export const saveRemoteConfig = async (config) => {
       config: config
     }));
 
+    // Use a small timeout to ensure the fetch doesn't hang if no-cors is problematic
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     await fetch(config.settings.webhookUrl, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: formData.toString()
+      body: formData.toString(),
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
 
     // Also save locally as a cached version
     localStorage.setItem('cccc_form_config', JSON.stringify(config));
@@ -138,7 +144,8 @@ export const getRemoteConfig = async (webhookUrl) => {
   if (!webhookUrl) return null;
 
   try {
-    const response = await fetch(`${webhookUrl}?type=get_config`);
+    // Add cache-busting timestamp to bypass browser/ISP caching
+    const response = await fetch(`${webhookUrl}?type=get_config&t=${Date.now()}`);
     const data = await response.json();
     if (data && data.header) {
       localStorage.setItem('cccc_form_config', JSON.stringify(data));
