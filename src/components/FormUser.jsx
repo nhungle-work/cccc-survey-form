@@ -370,7 +370,7 @@ const FormUser = () => {
                                                                 onChange={(e) => handleInputChange(e, q.id, 'checkbox')}
                                                                 value="Other"
                                                             />
-                                                            <span>Lựa chọn khác:</span>
+                                                            <span>{q.otherLabel || "Lựa chọn khác:"}</span>
                                                         </label>
                                                         <AnimatePresence>
                                                             {(formData[q.id] || []).includes("Other") && (
@@ -421,7 +421,7 @@ const FormUser = () => {
                                                                 onChange={(e) => handleInputChange(e, q.id, 'radio')}
                                                                 value="Other"
                                                             />
-                                                            <span>Khác:</span>
+                                                            <span>{q.otherLabel || "Khác:"}</span>
                                                         </label>
                                                         <AnimatePresence>
                                                             {formData[q.id] === "Other" && (

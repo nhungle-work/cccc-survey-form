@@ -16,7 +16,8 @@ export const defaultFormConfig = {
         "Bảo vệ dữ liệu cá nhân trong doanh nghiệp",
         "Các loại hợp đồng trong doanh nghiệp (soạn thảo, quản lý rủi ro, tranh chấp)"
       ],
-      allowOther: true
+      allowOther: true,
+      otherLabel: "Đề xuất thêm chủ đề khác:"
     },
     {
       id: "q2",
