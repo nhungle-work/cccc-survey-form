@@ -18,6 +18,7 @@ const FormUser = () => {
             // 1. Load local version first
             const currentConfig = getFormConfig();
             setConfig(currentConfig);
+            if (currentConfig.header?.title) document.title = currentConfig.header.title;
             if (currentConfig.design) applyDesign(currentConfig.design);
 
             // 2. Fetch remote version
@@ -29,6 +30,7 @@ const FormUser = () => {
                     const remoteConfig = await getRemoteConfig(webhookUrl);
                     if (remoteConfig && remoteConfig.questions) {
                         setConfig(remoteConfig);
+                        if (remoteConfig.header?.title) document.title = remoteConfig.header.title;
                         if (remoteConfig.design) applyDesign(remoteConfig.design);
                     }
                 } catch (error) {
@@ -311,8 +313,9 @@ const FormUser = () => {
                                 // Nếu là dòng trống (user cố tình enter 2 lần để cách dòng), giữ chiều cao để tạo blank line
                                 if (item.trim() === '') return <div key={key} className="h-4"></div>;
                                 return (
-                                    <p key={key} className="mb-2">
-                                        {item}
+                                    <p key={key} className="mb-2" dangerouslySetInnerHTML={{
+                                        __html: item.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                                    }}>
                                     </p>
                                 );
                             })}
