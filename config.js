@@ -1,7 +1,7 @@
 export const defaultFormConfig = {
   header: {
     title: "Khảo sát nhanh: Chủ đề Hỏi đáp cùng Chuyên gia (CCCC)",
-    description: "CLB Giám đốc Pháp chế Doanh nghiệp (CCCC) đang chuẩn bị chuỗi chương trình “Hỏi đáp cùng Chuyên gia” dành cho cộng đồng pháp chế doanh nghiệp và các nhà quản lý.\n\nChương trình được tổ chức online, nơi người tham dự có thể gửi câu hỏi trước để chuyên gia chuẩn bị và trao đổi trực tiếp trong phiên Q&A với chuyên gia - các Luật sư tại các công ty luật hàng đầu tại Việt Nam, Giảng viên tại các cơ sở đào tạo ngành Luật, các chuyên gia có nhiều năm kinh nghiệm tư vấn pháp luật.\n\nTrước khi triển khai, CCCC muốn lắng nghe ý kiến của Anh/Chị về chủ đề được quan tâm nhất, đồng thời thu thập một số câu hỏi thực tế từ doanh nghiệp để buổi trao đổi mang tính ứng dụng cao.\n\nKhảo sát này chỉ mất khoảng 1 phút.\n\nCảm ơn Anh/Chị đã dành thời gian chia sẻ!",
+    description: "Năm 2026 mở ra với nhiều thay đổi pháp lý quan trọng, đòi hỏi doanh nghiệp cần thích ứng nhanh và chính xác trong thực tiễn.\n\nTrong bối cảnh đó, **CLB Giám đốc Pháp chế Doanh nghiệp (CCCC)** triển khai chuỗi chương trình **“Hỏi đáp cùng Chuyên gia”**.\n\nĐây là nơi Anh/Chị được **đặt câu hỏi và giải đáp trực tiếp các vấn đề pháp luật thực tiễn** bởi các chuyên gia - **Luật sư** tại các công ty luật hàng đầu tại Việt Nam, **Giảng viên** tại các cơ sở đào tạo ngành Luật và **các chuyên gia có nhiều năm kinh nghiệm** tư vấn pháp luật.\n\n👉 **Chỉ với 1️⃣ PHÚT làm khảo sát**, Anh/Chị giúp CCCC đưa những vấn đề mình đang quan tâm trở thành nội dung trọng tâm trong các buổi thảo luận sắp tới.\n\n🎁 **Đặc quyền:** CCCC dành tặng **01 suất tham dự MIỄN PHÍ** buổi “Hỏi đáp cùng Chuyên gia” cho tất cả Anh/Chị hoàn thành khảo sát và để lại email đăng ký.\n\n🗓️ Thời hạn nhận câu trả lời: **23:59' ngày 29/03/2026.**\n\nCảm ơn Anh/Chị đã dành thời gian sẻ chia và đồng hành cùng CCCC!",
     backgroundImage: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=2000",
   },
   questions: [
@@ -11,31 +11,36 @@ export const defaultFormConfig = {
       title: "Anh/Chị quan tâm nhất đến chủ đề nào cho phiên Hỏi đáp cùng chuyên gia?",
       required: true,
       options: [
-        "Bảo hiểm xã hội (BHXH) & Thuế liên quan đến người lao động",
+        "Thuế liên quan đến người lao động",
+        "Bảo hiểm xã hội (BHXH) và các phúc lợi của người lao động",
         "Bảo vệ dữ liệu cá nhân trong doanh nghiệp",
         "Các loại hợp đồng trong doanh nghiệp (soạn thảo, quản lý rủi ro, tranh chấp)"
       ],
-      allowOther: true
+      allowOther: true,
+      otherLabel: "Đề xuất thêm chủ đề khác:"
     },
     {
       id: "q2",
       type: "textarea",
-      title: "Nếu được tham dự chương trình, Anh/Chị muốn gửi câu hỏi nào để chuyên gia trực tiếp tư vấn?",
+      title: "Nếu được tham dự chương trình, Anh/Chị muốn gửi câu hỏi nào để chuyên gia trực tiếp tư vấn? (Có thể gửi nhiều hơn một câu hỏi)",
       placeholder: "Câu hỏi của Anh/Chị...",
       required: true,
     },
     {
       id: "q3",
-      type: "radio",
-      title: "Vị trí công việc của Anh/Chị",
+      type: "radio_with_other",
+      title: "Phòng ban Anh/Chị đang công tác",
       required: true,
       options: [
-        "Tổng Giám đốc / Chủ doanh nghiệp",
-        "Trưởng phòng",
-        "Nhân viên cấp cao / Chuyên viên",
-        "Thực tập sinh",
-        "Người làm tự do"
-      ]
+        "Phòng Pháp chế",
+        "Phòng Nhân sự",
+        "Phòng Truyền thông",
+        "Phòng Kinh doanh",
+        "Phòng IT",
+        "Phòng Vận hành (Operations)",
+        "Phòng Sản xuất"
+      ],
+      allowOther: true
     },
     {
       id: "q4",
@@ -56,7 +61,7 @@ export const defaultFormConfig = {
     {
       id: "q5",
       type: "radio_with_link",
-      title: "Anh/Chị cho phép CCCC gửi thông tin chương trình qua bản tin pháp luật chứ? (Theo dõi CCCC tại [Facebook](https://www.facebook.com/profile.php?id=61559581396959) hoặc [LinkedIn](https://www.linkedin.com/company/chief-corporate-counsel-club/))",
+      title: "Anh/Chị cho phép CCCC gửi thông tin chương trình qua bản tin pháp luật chứ?",
       required: true,
       options: [
         "Tôi đồng ý",
@@ -132,7 +137,7 @@ export const saveRemoteConfig = async (config) => {
 
     // 2. VERIFICATION FETCH: Immediately try to read it back to confirm it reached the cloud
     console.log("Verifying cloud save...");
-    await new Promise(r => setTimeout(r, 1500)); // Small delay for Google to settle
+    await new Promise(r => setTimeout(r, 3000)); // Increased delay for Google to settle
     const verifyConfig = await getRemoteConfig(config.settings.webhookUrl);
     
     if (verifyConfig && verifyConfig.header && verifyConfig.header.title === config.header.title) {
